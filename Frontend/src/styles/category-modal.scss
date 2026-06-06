@@ -1,0 +1,482 @@
+@use "sass:color";
+
+// ========================================================
+// CATEGORY MODAL STYLES — Neumorphic Theme
+// ========================================================
+
+// ── Variables ──────────────────────────────────────────
+$nm-bg: #e8eaf0;
+$nm-bg-card: #eef0f5;
+$nm-shadow-light: #ffffff;
+$nm-shadow-dark: #c8cad4;
+
+$nm-text-primary: #3a3d52;
+$nm-text-secondary: #7a7f9a;
+$nm-text-muted: #a8adc4;
+$nm-accent: #5b6af0;
+$nm-accent-hover: #4a58e0;
+
+$nm-radius-md: 16px;
+$nm-radius-lg: 24px;
+$nm-radius-sm: 10px;
+
+// ── Mixins ─────────────────────────────────────────────
+@mixin nm-raised($radius: $nm-radius-md) {
+  background: $nm-bg-card;
+  border-radius: $radius;
+  box-shadow:
+    8px 8px 18px $nm-shadow-dark,
+    -8px -8px 18px $nm-shadow-light;
+}
+
+@mixin nm-inset($radius: $nm-radius-md) {
+  background: $nm-bg;
+  border-radius: $radius;
+  box-shadow:
+    inset 5px 5px 12px $nm-shadow-dark,
+    inset -5px -5px 12px $nm-shadow-light;
+}
+
+// ── Modal Overlay ──────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      backdrop-filter: blur(0px);
+    }
+    to {
+      opacity: 1;
+      backdrop-filter: blur(4px);
+    }
+  }
+}
+
+// ── Modal Content ──────────────────────────────────────
+.modal-content {
+  @include nm-raised($nm-radius-lg);
+  background: $nm-bg-card;
+  border-radius: $nm-radius-lg;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+}
+
+// ── Modal Header ───────────────────────────────────────
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid rgba($nm-shadow-dark, 0.2);
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $nm-text-primary;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: $nm-radius-sm;
+  background:
+    inset 3px 3px 8px rgba($nm-shadow-dark, 0.65),
+    inset -3px -3px 8px $nm-shadow-light;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $nm-text-secondary;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    color: $nm-accent;
+    box-shadow:
+      inset 5px 5px 12px rgba($nm-shadow-dark, 0.8),
+      inset -5px -5px 12px $nm-shadow-light,
+      0 0 0 2px rgba($nm-accent, 0.22);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ── Modal Body ─────────────────────────────────────────
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $nm-text-primary;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.2px;
+}
+
+// ── Form Section ───────────────────────────────────────
+.form-section {
+  @include nm-inset($nm-radius-md);
+  padding: 20px;
+  border-radius: $nm-radius-md;
+}
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $nm-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  input,
+  textarea {
+    @include nm-raised($nm-radius-sm);
+    padding: 12px 14px;
+    border: none;
+    border-radius: $nm-radius-sm;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: $nm-text-primary;
+    outline: none;
+    transition: box-shadow 0.25s ease;
+    resize: vertical;
+
+    &::placeholder {
+      color: $nm-text-muted;
+    }
+
+    &:focus {
+      box-shadow:
+        inset 5px 5px 12px rgba($nm-shadow-dark, 0.8),
+        inset -5px -5px 12px $nm-shadow-light,
+        0 0 0 2.5px rgba($nm-accent, 0.22);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+// ── List Section ───────────────────────────────────────
+.list-section {
+  @include nm-inset($nm-radius-md);
+  padding: 20px;
+  border-radius: $nm-radius-md;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 400px;
+
+  // Custom scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: rgba($nm-shadow-dark, 0.5) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba($nm-shadow-dark, 0.4);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba($nm-accent, 0.3);
+    }
+  }
+}
+
+.category-item {
+  @include nm-raised($nm-radius-sm);
+  padding: 12px 14px;
+  border-radius: $nm-radius-sm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow:
+      10px 10px 22px $nm-shadow-dark,
+      -10px -10px 22px $nm-shadow-light;
+    transform: translateY(-2px);
+  }
+}
+
+.category-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.category-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $nm-text-primary;
+  margin: 0 0 4px 0;
+}
+
+.category-description {
+  font-size: 0.8rem;
+  color: $nm-text-muted;
+  margin: 0;
+  word-break: break-word;
+}
+
+.category-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: $nm-radius-sm;
+  background:
+    inset 3px 3px 6px rgba($nm-shadow-dark, 0.5),
+    inset -3px -3px 6px $nm-shadow-light;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &.edit-btn {
+    color: #3b82f6;
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(145deg, #3b82f6, #2563eb);
+      color: #fff;
+      box-shadow:
+        4px 4px 10px rgba(59, 130, 246, 0.3),
+        -2px -2px 8px $nm-shadow-light;
+    }
+  }
+
+  &.delete-btn {
+    color: #ef4444;
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(145deg, #ef4444, #dc2626);
+      color: #fff;
+      box-shadow:
+        4px 4px 10px rgba(239, 68, 68, 0.3),
+        -2px -2px 8px $nm-shadow-light;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.92);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ── Empty State ────────────────────────────────────────
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: $nm-text-muted;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: $nm-text-secondary;
+  font-size: 0.9rem;
+}
+
+// ── Buttons ────────────────────────────────────────────
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: $nm-radius-sm;
+  cursor: pointer;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-transform: capitalize;
+
+  &.btn-primary {
+    background: linear-gradient(
+      145deg,
+      color.adjust($nm-accent, $lightness: 5%),
+      $nm-accent
+    );
+    color: #fff;
+    box-shadow:
+      5px 5px 12px rgba($nm-accent, 0.3),
+      -3px -3px 10px $nm-shadow-light;
+
+    &:hover:not(:disabled) {
+      filter: brightness(1.06);
+      box-shadow:
+        6px 6px 14px rgba($nm-accent, 0.4),
+        -3px -3px 10px $nm-shadow-light;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+  }
+
+  &.btn-secondary {
+    @include nm-raised($nm-radius-sm);
+    background: $nm-bg-card;
+    color: $nm-text-secondary;
+
+    &:hover:not(:disabled) {
+      color: $nm-accent;
+      box-shadow:
+        8px 8px 18px $nm-shadow-dark,
+        -8px -8px 18px $nm-shadow-light;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// ── Modal Footer ───────────────────────────────────────
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba($nm-shadow-dark, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// ── Responsive ────────────────────────────────────────
+@media (max-width: 480px) {
+  .modal-header {
+    padding: 16px;
+  }
+
+  .modal-title {
+    font-size: 1.2rem;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .modal-footer {
+    padding: 12px 16px;
+  }
+
+  .categories-list {
+    max-height: 250px;
+  }
+
+  .form-group,
+  .form-actions {
+    gap: 10px;
+  }
+}

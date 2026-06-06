@@ -1,0 +1,415 @@
+@use "sass:color";
+
+// ========================================================
+// VENDORS PAGE STYLES — Neumorphic Theme
+// ========================================================
+
+// ── Variables ──────────────────────────────────────────
+$nm-bg: #e8eaf0;
+$nm-bg-card: #eef0f5;
+$nm-shadow-light: #ffffff;
+$nm-shadow-dark: #c8cad4;
+
+$nm-text-primary: #3a3d52;
+$nm-text-secondary: #7a7f9a;
+$nm-text-muted: #a8adc4;
+$nm-accent: #5b6af0;
+$nm-accent-hover: #4a58e0;
+
+$nm-radius-md: 16px;
+$nm-radius-lg: 24px;
+$nm-radius-sm: 10px;
+
+// ── Mixins ─────────────────────────────────────────────
+@mixin nm-raised($radius: $nm-radius-md) {
+  background: $nm-bg-card;
+  border-radius: $radius;
+  box-shadow:
+    8px 8px 18px $nm-shadow-dark,
+    -8px -8px 18px $nm-shadow-light;
+}
+
+@mixin nm-inset($radius: $nm-radius-md) {
+  background: $nm-bg;
+  border-radius: $radius;
+  box-shadow:
+    inset 5px 5px 12px $nm-shadow-dark,
+    inset -5px -5px 12px $nm-shadow-light;
+}
+
+// ── Main Container ─────────────────────────────────────
+.vendors-container {
+  position: relative;
+  margin-top: 70px;
+  margin-left: 240px;
+  min-height: calc(100vh - 70px);
+  background: $nm-bg;
+  padding: 30px;
+  transition: margin-left 0.3s ease;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  &.sidebar-collapsed {
+    margin-left: 80px;
+  }
+}
+
+// ── Page Header ────────────────────────────────────────
+.vendors-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.header-content {
+  .vendors-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $nm-text-primary;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+  }
+
+  .vendors-subtitle {
+    font-size: 0.9rem;
+    color: $nm-text-secondary;
+    font-weight: 500;
+  }
+}
+
+// ── Add Vendor Button ──────────────────────────────────
+.add-vendor-btn {
+  @include nm-raised($nm-radius-md);
+  padding: 12px 24px;
+  background: linear-gradient(
+    145deg,
+    color.adjust($nm-accent, $lightness: 5%),
+    $nm-accent
+  );
+  border: none;
+  border-radius: $nm-radius-md;
+  cursor: pointer;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+  box-shadow:
+    5px 5px 14px rgba($nm-accent, 0.35),
+    -3px -3px 10px $nm-shadow-light;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    filter: brightness(1.06);
+    box-shadow:
+      7px 7px 18px rgba($nm-accent, 0.45),
+      -3px -3px 12px $nm-shadow-light;
+  }
+
+  &:active {
+    transform: scale(0.985);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+// ── Search Section ────────────────────────────────────
+.search-section {
+  margin-bottom: 24px;
+}
+
+.search-input {
+  @include nm-inset($nm-radius-md);
+  width: 100%;
+  padding: 14px 18px;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: $nm-text-primary;
+  border: none;
+  outline: none;
+  transition: box-shadow 0.25s ease;
+
+  &::placeholder {
+    color: $nm-text-muted;
+    font-weight: 400;
+  }
+
+  &:focus {
+    box-shadow:
+      inset 5px 5px 12px rgba($nm-shadow-dark, 0.8),
+      inset -5px -5px 12px $nm-shadow-light,
+      0 0 0 2.5px rgba($nm-accent, 0.22);
+  }
+}
+
+// ── Filter Tabs ────────────────────────────────────────
+.filter-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filter-tab {
+  @include nm-inset($nm-radius-sm);
+  padding: 8px 16px;
+  background: $nm-bg;
+  border: 2px solid transparent;
+  border-radius: $nm-radius-sm;
+  cursor: pointer;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $nm-text-secondary;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow:
+      inset 3px 3px 8px rgba($nm-shadow-dark, 0.5),
+      inset -3px -3px 8px $nm-shadow-light,
+      0 0 0 2px rgba($nm-accent, 0.22);
+    color: $nm-accent;
+  }
+
+  &.active {
+    background: linear-gradient(
+      145deg,
+      color.adjust($nm-accent, $lightness: 5%),
+      $nm-accent
+    );
+    color: #fff;
+    border-color: rgba($nm-accent, 0.3);
+    box-shadow:
+      5px 5px 14px rgba($nm-accent, 0.35),
+      -3px -3px 10px $nm-shadow-light;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ── Table Card ────────────────────────────────────────
+.table-card {
+  @include nm-raised($nm-radius-lg);
+  padding: 24px;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background:
+        inset 3px 3px 8px rgba($nm-shadow-dark, 0.5),
+        inset -3px -3px 8px $nm-shadow-light;
+
+      th {
+        padding: 14px 16px;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: $nm-text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid rgba($nm-shadow-dark, 0.3);
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid rgba($nm-shadow-dark, 0.2);
+        transition: background-color 0.2s ease;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background: rgba($nm-accent, 0.08);
+        }
+
+        td {
+          padding: 14px 16px;
+          font-size: 0.9rem;
+          color: $nm-text-primary;
+
+          &.vendor-name {
+            font-weight: 600;
+            color: $nm-text-primary;
+          }
+
+          &.gst-number {
+            font-family: "Courier New", monospace;
+            font-size: 0.85rem;
+            color: $nm-text-secondary;
+          }
+
+          &.no-data {
+            text-align: center;
+            color: $nm-text-muted;
+            font-style: italic;
+            padding: 40px 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ── Status Badge ───────────────────────────────────────
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+
+  &.status-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  &.status-pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  &.status-blocked {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+}
+
+// ── View Button ────────────────────────────────────────
+.view-btn {
+  @include nm-raised($nm-radius-sm);
+  padding: 6px 14px;
+  background: $nm-bg-card;
+  border: 1px solid rgba($nm-accent, 0.3);
+  border-radius: $nm-radius-sm;
+  cursor: pointer;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $nm-accent;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      145deg,
+      color.adjust($nm-accent, $lightness: 5%),
+      $nm-accent
+    );
+    color: #fff;
+    box-shadow:
+      5px 5px 14px rgba($nm-accent, 0.35),
+      -3px -3px 10px $nm-shadow-light;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ── Responsive ────────────────────────────────────────
+@media (max-width: 768px) {
+  .vendors-container {
+    margin-left: 80px;
+    padding: 20px;
+  }
+
+  .vendors-title {
+    font-size: 1.4rem;
+  }
+
+  .filter-tabs {
+    gap: 8px;
+  }
+
+  .filter-tab {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .table-card {
+    padding: 16px;
+  }
+
+  table {
+    th,
+    td {
+      padding: 10px 12px;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .vendors-container {
+    margin-left: 60px;
+    padding: 16px;
+  }
+
+  .vendors-title {
+    font-size: 1.2rem;
+  }
+
+  .vendors-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .filter-tabs {
+    gap: 6px;
+  }
+
+  .filter-tab {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .search-input {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .table-wrapper {
+    font-size: 0.7rem;
+
+    table {
+      th,
+      td {
+        padding: 8px 6px;
+      }
+    }
+  }
+
+  .view-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+}
