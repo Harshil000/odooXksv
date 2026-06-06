@@ -7,6 +7,24 @@ const formatAmount = (amount) => {
   return `₹ ${Number(amount || 0).toLocaleString("en-IN")}`;
 };
 
+// Group quotations by RFQ
+const groupQuotationsByRFQ = (quotations) => {
+  const grouped = {};
+  quotations.forEach((q) => {
+    const rfqKey = `${q.rfq_id}_${q.rfq_number}`;
+    if (!grouped[rfqKey]) {
+      grouped[rfqKey] = {
+        rfq_id: q.rfq_id,
+        rfq_number: q.rfq_number,
+        title: q.title,
+        quotations: [],
+      };
+    }
+    grouped[rfqKey].quotations.push(q);
+  });
+  return Object.values(grouped);
+};
+
 export default function Approvals() {
   const { user } = useAuth();
   const {
@@ -150,48 +168,71 @@ export default function Approvals() {
 
       <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: "24px", alignItems: "start" }}>
 
-        {/* Left column: Pending list */}
-        <div className="table-card" style={{ padding: "16px" }}>
-          <div className="card-title" style={{ fontSize: "1rem", marginBottom: "12px" }}>Pending Quotes</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {quotations.map((q) => {
-              const isActive = selectedQuote?.id === q.id;
-              return (
-                <div
-                  key={q.id}
-                  onClick={() => handleSelectQuote(q)}
-                  style={{
-                    padding: "12px",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    background: isActive ? "#e0e7ff" : "#eef0f5",
-                    borderLeft: isActive ? "4px solid #5b6af0" : "4px solid transparent",
-                    boxShadow: isActive
-                      ? "inset 2px 2px 5px #c8cad4, inset -2px -2px 5px #ffffff"
-                      : "3px 3px 6px #c8cad4, -3px -3px 6px #ffffff"
-                  }}
-                >
-                  <div style={{ fontWeight: 800, fontSize: "0.85rem", color: "#3a3d52" }}>{q.quotation_number}</div>
-                  <div style={{ fontSize: "0.8rem", color: "#7a7f9a", margin: "2px 0 6px 0" }}>
-                    {q.company_name} | RFQ: {q.rfq_number}
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontWeight: 700, color: "#5b6af0", fontSize: "0.8rem" }}>{formatAmount(q.total_amount)}</span>
-                    <span className="status-badge" style={{
-                      padding: "2px 6px",
-                      borderRadius: "6px",
-                      fontSize: "0.65rem",
-                      fontWeight: 700,
-                      background: q.status === "SUBMITTED" ? "#e0e7ff" : "#fef3c7",
-                      color: q.status === "SUBMITTED" ? "#3730a3" : "#92400e",
-                    }}>
-                      {q.status}
-                    </span>
+        {/* Left column: Pending list grouped by RFQ */}
+        <div className="table-card" style={{ padding: "16px", maxHeight: "calc(100vh - 300px)", overflowY: "auto", borderRadius: "12px" }}>
+          <div className="card-title" style={{ fontSize: "1rem", marginBottom: "12px" }}>Pending Quotes by RFQ</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {groupQuotationsByRFQ(quotations).map((rfqGroup) => (
+              <div key={rfqGroup.rfq_id} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {/* RFQ Header */}
+                <div style={{
+                  padding: "10px 12px",
+                  background: "#e8eaf0",
+                  borderRadius: "8px",
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  color: "#3a3d52",
+                  border: "1px solid rgba(200, 202, 212, 0.5)",
+                  boxShadow: "2px 2px 4px rgba(200, 202, 212, 0.3), -1px -1px 3px rgba(255, 255, 255, 0.8)"
+                }}>
+                  RFQ: {rfqGroup.rfq_number}
+                  <div style={{ fontSize: "0.7rem", color: "#7a7f9a", fontWeight: 600, marginTop: "2px" }}>
+                    {rfqGroup.title}
                   </div>
                 </div>
-              );
-            })}
+                {/* Quotations under this RFQ */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginLeft: "8px" }}>
+                  {rfqGroup.quotations.map((q) => {
+                    const isActive = selectedQuote?.id === q.id;
+                    return (
+                      <div
+                        key={q.id}
+                        onClick={() => handleSelectQuote(q)}
+                        style={{
+                          padding: "12px",
+                          borderRadius: "10px",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                          background: isActive ? "#e0e7ff" : "#eef0f5",
+                          borderLeft: isActive ? "4px solid #5b6af0" : "4px solid transparent",
+                          boxShadow: isActive
+                            ? "inset 2px 2px 5px #c8cad4, inset -2px -2px 5px #ffffff"
+                            : "3px 3px 6px #c8cad4, -3px -3px 6px #ffffff"
+                        }}
+                      >
+                        <div style={{ fontWeight: 800, fontSize: "0.85rem", color: "#3a3d52" }}>{q.quotation_number}</div>
+                        <div style={{ fontSize: "0.8rem", color: "#7a7f9a", margin: "2px 0 6px 0" }}>
+                          {q.company_name}
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontWeight: 700, color: "#5b6af0", fontSize: "0.8rem" }}>{formatAmount(q.total_amount)}</span>
+                          <span className="status-badge" style={{
+                            padding: "2px 6px",
+                            borderRadius: "6px",
+                            fontSize: "0.65rem",
+                            fontWeight: 700,
+                            background: q.status === "SUBMITTED" ? "#e0e7ff" : "#fef3c7",
+                            color: q.status === "SUBMITTED" ? "#3730a3" : "#92400e",
+                          }}>
+                            {q.status}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
             {quotations.length === 0 && (
               <div style={{ textAlign: "center", color: "#a8adc4", padding: "20px", fontSize: "0.85rem" }}>
                 No pending quotations for approval.

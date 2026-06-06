@@ -17,8 +17,11 @@ export async function createApprovalTx(approverId, {
   try {
     await client.query("BEGIN");
 
-    // 1. Fetch current quotation status
-    const qCheckResult = await client.query("SELECT id, status FROM quotations WHERE id = $1", [quotation_id]);
+    // 1. Fetch current quotation status and its RFQ ID
+    const qCheckResult = await client.query(
+      "SELECT id, status, rfq_id FROM quotations WHERE id = $1",
+      [quotation_id]
+    );
     const quotation = qCheckResult.rows[0];
     if (!quotation) {
       const err = new Error("Quotation not found");
@@ -46,6 +49,14 @@ export async function createApprovalTx(approverId, {
 
     // 2. Update quotation status
     await client.query("UPDATE quotations SET status = $1 WHERE id = $2", [newQuoteStatus, quotation_id]);
+
+    // 3. Auto-reject competing quotations for the same RFQ when this quotation is approved
+    if (status === "APPROVED" && quotation.rfq_id) {
+      await client.query(
+        "UPDATE quotations SET status = 'REJECTED' WHERE rfq_id = $1 AND id != $2 AND status = 'SUBMITTED'",
+        [quotation.rfq_id, quotation_id]
+      );
+    }
 
     // 3. Insert approval log
     const approvalLevel = 1; // Default level

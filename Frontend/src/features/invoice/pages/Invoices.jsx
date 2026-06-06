@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useInvoice from "../hook/useInvoice";
 import { formatAmount, calculateTaxes } from "../utils/invoice.utils";
 import "../../../styles/dashboard.scss";
+
+// Ensure html2pdf is available globally
+// Note: html2pdf should be included via CDN in index.html or installed via npm
+const html2pdf = window.html2pdf || (typeof require !== 'undefined' ? require('html2pdf') : null);
 
 export default function Invoices() {
   const {
@@ -13,6 +17,33 @@ export default function Invoices() {
     loadInvoices,
     loadInvoiceDetails,
   } = useInvoice();
+
+  const invoiceRef = useRef(null);
+
+  // Handle PDF download using html2pdf
+  const handlePdfDownload = () => {
+    if (!invoiceRef.current || !invoiceDetails) return;
+
+    const element = invoiceRef.current;
+    const fileName = `Invoice_${invoiceDetails.invoice_number}_${new Date().toISOString().split('T')[0]}.pdf`;
+
+    const options = {
+      margin: 10,
+      filename: fileName,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, backgroundColor: '#eef0f5' },
+      jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    if (html2pdf && typeof html2pdf.jsPDF === 'function') {
+      // Using html2pdf library
+      html2pdf().set(options).from(element).save();
+    } else {
+      console.warn('html2pdf library not available. Falling back to print dialog.');
+      window.print();
+    }
+  };
 
   useEffect(() => {
     loadInvoices().then((data) => {
@@ -123,7 +154,7 @@ export default function Invoices() {
         {/* Invoice Detail Sheet (Wireframe 3) */}
         <div>
           {invoiceDetails ? (
-            <div className="table-card" style={{ padding: "30px", background: "#eef0f5", boxShadow: "8px 8px 20px #c8cad4, -8px -8px 20px #ffffff" }}>
+            <div className="table-card" style={{ padding: "30px", background: "#eef0f5", boxShadow: "8px 8px 20px #c8cad4, -8px -8px 20px #ffffff" }} ref={invoiceRef}>
 
               {/* Header section */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px dashed #c8cad4", paddingBottom: "20px", marginBottom: "20px" }}>
@@ -147,7 +178,7 @@ export default function Invoices() {
                   <button
                     className="action-btn"
                     style={{ minWidth: "150px", minHeight: "40px", fontSize: "0.85rem", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                    onClick={() => alert("PDF download triggered")}
+                    onClick={handlePdfDownload}
                   >
                     Download PDF
                   </button>
