@@ -1,0 +1,438 @@
+/* ========================================================
+   QUOTATION SUBMISSION PAGE
+   ======================================================== */
+
+.quotation-submission {
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Header ──
+.page-header {
+  margin-bottom: 32px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a78bfa, #c084fc, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+}
+
+// ── RFQ Summary Card ──
+.rfq-summary-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: #e2e8f0;
+  }
+}
+
+// ── Items Section ──
+.items-section {
+  margin-bottom: 28px;
+
+  h3 {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+}
+
+.table-wrapper {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: auto;
+  margin-bottom: 16px;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(167, 139, 250, 0.3);
+    border-radius: 3px;
+  }
+}
+
+.quotation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  thead {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 2px solid rgba(167, 139, 250, 0.2);
+
+    th {
+      padding: 14px 16px;
+      text-align: left;
+      color: #cbd5e1;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 12px;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+      &:hover {
+        background: rgba(167, 139, 250, 0.05);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: 14px 16px;
+        color: #e2e8f0;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .input-cell {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    color: #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: rgba(167, 139, 250, 0.5);
+      background: rgba(15, 23, 42, 0.8);
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+    }
+
+    &::placeholder {
+      color: #64748b;
+    }
+  }
+
+  .total-cell {
+    font-weight: 600;
+    color: #a78bfa;
+  }
+}
+
+.btn-remove {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+  }
+}
+
+.btn-add-item {
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  color: #a78bfa;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(167, 139, 250, 0.2);
+    border-color: rgba(167, 139, 250, 0.5);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ── Tax and Notes Section ──
+.tax-notes-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .tax-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.input-field,
+.textarea-field {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  color: #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: rgba(167, 139, 250, 0.5);
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+  }
+
+  &::placeholder {
+    color: #64748b;
+  }
+}
+
+.textarea-field {
+  resize: vertical;
+  min-height: 100px;
+}
+
+// ── Summary Box ──
+.summary-box {
+  background: rgba(30, 41, 59, 0.6);
+  border: 2px solid rgba(167, 139, 250, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #cbd5e1;
+
+  .amount {
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+
+  &--total {
+    padding-top: 12px;
+    border-top: 1px solid rgba(167, 139, 250, 0.2);
+    font-size: 16px;
+    font-weight: 700;
+    color: #e2e8f0;
+
+    .amount {
+      color: #a78bfa;
+      font-size: 18px;
+    }
+  }
+}
+
+// ── Additional Notes ──
+.additional-notes {
+  margin-bottom: 28px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ── Action Buttons ──
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
+.btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &-primary {
+    background: linear-gradient(135deg, #a78bfa, #c084fc);
+    color: #0f172a;
+    font-weight: 700;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(167, 139, 250, 0.3);
+    }
+  }
+
+  &-secondary {
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    color: #a78bfa;
+
+    &:hover:not(:disabled) {
+      background: rgba(167, 139, 250, 0.2);
+      border-color: rgba(167, 139, 250, 0.5);
+      transform: translateY(-2px);
+    }
+  }
+}
+/* =====================================
+   QUOTATION MODULE ACTIONS
+===================================== */
+
+.quotation-module-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.module-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  padding: 0.9rem 1.4rem;
+
+  border-radius: 12px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+}
+
+.module-btn.primary {
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #a78bfa
+  );
+
+  color: white;
+}
+
+.module-btn.secondary {
+  background: rgba(30, 41, 59, 0.5);
+
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: #e2e8f0;
+}
+
+.module-btn:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+
+  .quotation-module-actions {
+    flex-direction: column;
+  }
+
+  .module-btn {
+    width: 100%;
+  }
+
+}
