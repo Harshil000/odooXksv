@@ -1,0 +1,229 @@
+@use "sass:color";
+
+// ========================================================
+// SIDEBAR STYLES — Neumorphic Theme
+// ========================================================
+
+// ── Variables ──────────────────────────────────────────
+$nm-bg: #e8eaf0;
+$nm-bg-card: #eef0f5;
+$nm-shadow-light: #ffffff;
+$nm-shadow-dark: #c8cad4;
+
+$nm-text-primary: #3a3d52;
+$nm-text-secondary: #7a7f9a;
+$nm-text-muted: #a8adc4;
+$nm-accent: #5b6af0;
+$nm-accent-hover: #4a58e0;
+
+$nm-radius-md: 16px;
+$nm-radius-sm: 10px;
+
+// ── Sidebar ────────────────────────────────────────────
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 70px;
+  width: 240px;
+  height: calc(100vh - 70px);
+  background: $nm-bg-card;
+  box-shadow: 8px 0 18px rgba($nm-shadow-dark, 0.3);
+  z-index: 99;
+  padding: 20px 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: width 0.3s ease;
+
+  &.collapsed {
+    width: 80px;
+
+    .sidebar-toggle {
+      left: 15px;
+    }
+
+    .nav-label {
+      display: none;
+    }
+
+    .nav-item {
+      justify-content: center;
+      gap: 0;
+    }
+
+    .nav-icon {
+      font-size: 1.3rem;
+    }
+  }
+
+  // Scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: rgba($nm-shadow-dark, 0.5) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba($nm-shadow-dark, 0.4);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba($nm-accent, 0.3);
+    }
+  }
+}
+
+// ── Toggle Button ──────────────────────────────────────
+.sidebar-toggle {
+  position: absolute;
+  top: 20px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: $nm-radius-sm;
+  background:
+    inset 3px 3px 8px rgba($nm-shadow-dark, 0.65),
+    inset -3px -3px 8px $nm-shadow-light;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $nm-text-secondary;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $nm-accent;
+    box-shadow:
+      inset 5px 5px 12px rgba($nm-shadow-dark, 0.8),
+      inset -5px -5px 12px $nm-shadow-light,
+      0 0 0 2px rgba($nm-accent, 0.22);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ── Navigation ─────────────────────────────────────────
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  margin-top: 20px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: $nm-radius-md;
+  background:
+    inset 3px 3px 8px rgba($nm-shadow-dark, 0.5),
+    inset -3px -3px 8px $nm-shadow-light;
+  color: $nm-text-secondary;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  .nav-icon {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover {
+    background:
+      inset 5px 5px 12px rgba($nm-shadow-dark, 0.8),
+      inset -5px -5px 12px $nm-shadow-light,
+      0 0 0 2px rgba($nm-accent, 0.22);
+    color: $nm-accent;
+  }
+
+  &.active {
+    background: linear-gradient(
+      145deg,
+      color.adjust($nm-accent, $lightness: 5%),
+      $nm-accent
+    );
+    color: #fff;
+    box-shadow:
+      5px 5px 14px rgba($nm-accent, 0.35),
+      -3px -3px 10px $nm-shadow-light;
+    border-color: rgba($nm-accent, 0.3);
+
+    .nav-icon {
+      font-size: 1.3rem;
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ── Responsive ─────────────────────────────────────────
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+
+    &:not(.collapsed) {
+      position: fixed;
+      left: -70px;
+      transition: left 0.3s ease;
+
+      &.open {
+        left: 0;
+      }
+    }
+
+    .nav-label {
+      display: none;
+    }
+
+    .nav-item {
+      justify-content: center;
+      gap: 0;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 60px;
+    padding: 12px 8px;
+  }
+
+  .nav-item {
+    padding: 10px 8px;
+    border-radius: $nm-radius-sm;
+  }
+
+  .sidebar-toggle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}

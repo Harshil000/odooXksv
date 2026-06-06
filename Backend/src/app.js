@@ -3,6 +3,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { handleError } from "./middleware/error.middleware.js";
 import authRoute from "./routes/auth.route.js";
+import rfqRoute from "./routes/rfq.route.js";
+import vendorRoute from "./routes/vendors.route.js";
 import morgan from "morgan";
 
 const app = express();
@@ -38,6 +40,8 @@ app.use(morgan("dev"))
 // ROUTES
 // =========================
 app.use("/api/auth", authRoute);
+app.use("/api/rfq", rfqRoute);
+app.use("/api/vendors", vendorRoute);
 
 // =========================
 // HEALTH CHECK

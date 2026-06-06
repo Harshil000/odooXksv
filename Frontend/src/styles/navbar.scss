@@ -1,0 +1,161 @@
+@use "sass:color";
+
+// ========================================================
+// NAVBAR STYLES — Neumorphic Theme
+// ========================================================
+
+// ── Variables ──────────────────────────────────────────
+$nm-bg: #e8eaf0;
+$nm-bg-card: #eef0f5;
+$nm-shadow-light: #ffffff;
+$nm-shadow-dark: #c8cad4;
+
+$nm-text-primary: #3a3d52;
+$nm-text-secondary: #7a7f9a;
+$nm-text-muted: #a8adc4;
+$nm-accent: #5b6af0;
+$nm-accent-hover: #4a58e0;
+
+$nm-radius-sm: 10px;
+$nm-radius-md: 16px;
+
+// ── Navbar ─────────────────────────────────────────────
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: $nm-bg-card;
+  box-shadow:
+    0 8px 18px rgba($nm-shadow-dark, 0.3),
+    inset 0 1px 0 $nm-shadow-light;
+  z-index: 100;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 30px;
+  max-width: 100%;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .logo-text {
+    font-size: 1.35rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #5b6af0, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+
+  .user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $nm-text-primary;
+    letter-spacing: -0.3px;
+  }
+
+  .user-role {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: $nm-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c084fc, #a78bfa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  box-shadow:
+    5px 5px 14px rgba($nm-shadow-dark, 0.3),
+    -3px -3px 10px $nm-shadow-light;
+  flex-shrink: 0;
+}
+
+.logout-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: $nm-radius-sm;
+  background:
+    inset 3px 3px 8px rgba($nm-shadow-dark, 0.65),
+    inset -3px -3px 8px $nm-shadow-light;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $nm-text-secondary;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: $nm-accent;
+    box-shadow:
+      inset 5px 5px 12px rgba($nm-shadow-dark, 0.8),
+      inset -5px -5px 12px $nm-shadow-light,
+      0 0 0 2px rgba($nm-accent, 0.22);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ── Responsive ─────────────────────────────────────────
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .navbar-logo .logo-text {
+    font-size: 1.1rem;
+  }
+}
