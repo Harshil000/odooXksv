@@ -5,14 +5,40 @@ import { getAccessCookieOptions } from "../utils/cookie.util.js";
 import { issueAccessToken } from "../utils/token.util.js";
 
 export async function registerController(req, res, next) {
-    try {
-        const user = await createUser(req.body);
-        const accessToken = issueAccessToken({ id: user.id, role: user.role, restaurant_id: user.restaurant_id });
-        res.cookie("accessToken", accessToken, getAccessCookieOptions());
-        res.status(201).json({ msg: "User registered successfully", user, accessToken });
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const user = await createUser(req.body);
+    const accessToken = issueAccessToken({
+      id: user.id,
+      role: user.role,
+      email: user.email,
+      vendor_id: user.vendor_id,
+    });
+
+    res.cookie("accessToken", accessToken, getAccessCookieOptions());
+
+    res.status(201).json({
+      msg: "User registered successfully",
+      user: {
+        id: user.id,
+        name: user.full_name,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role,
+        is_active: user.is_active,
+        vendor_id: user.vendor_id,
+        company_name: user.company_name,
+        gst_number: user.gst_number,
+        contact_person: user.contact_person,
+        phone: user.phone,
+        address: user.address,
+        rating: user.rating,
+        vendor_status: user.vendor_status,
+      },
+      accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function loginController(req, res, next) {
@@ -21,22 +47,38 @@ export async function loginController(req, res, next) {
   try {
     const user = await authenticateUser(email, password);
 
-        const accessToken = issueAccessToken({ id: user.id, role: user.role, restaurant_id: user.restaurant_id });
-        res.cookie("accessToken", accessToken, getAccessCookieOptions());
-        res.status(200).json({
-            msg: 'Login successful',
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                restaurant_id: user.restaurant_id,
-                restaurant_name: user.restaurant_name,
-            }
-        });
-    } catch (error) {
-        next(error);
-    }
+    const accessToken = issueAccessToken({
+      id: user.id,
+      role: user.role,
+      email: user.email,
+      vendor_id: user.vendor_id,
+    });
+
+    res.cookie("accessToken", accessToken, getAccessCookieOptions());
+
+    res.status(200).json({
+      msg: "Login successful",
+      user: {
+        id: user.id,
+        name: user.full_name,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role,
+        is_active: user.is_active,
+        vendor_id: user.vendor_id,
+        company_name: user.company_name,
+        gst_number: user.gst_number,
+        contact_person: user.contact_person,
+        phone: user.phone,
+        address: user.address,
+        rating: user.rating,
+        vendor_status: user.vendor_status,
+      },
+      accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function getMeController(req, res, next) {
@@ -49,7 +91,22 @@ export async function getMeController(req, res, next) {
 
     res.status(200).json({
       authenticated: true,
-      user,
+      user: {
+        id: user.id,
+        name: user.full_name,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role,
+        is_active: user.is_active,
+        vendor_id: user.vendor_id,
+        company_name: user.company_name,
+        gst_number: user.gst_number,
+        contact_person: user.contact_person,
+        phone: user.phone,
+        address: user.address,
+        rating: user.rating,
+        vendor_status: user.vendor_status,
+      },
     });
   } catch (error) {
     next(error);

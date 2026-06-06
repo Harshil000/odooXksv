@@ -3,56 +3,86 @@ import argon2 from "argon2";
 import {
   SELECT_USER_BY_EMAIL_QUERY,
   INSERT_USER_QUERY,
-  INSERT_RESTAURANT_QUERY,
-  SELECT_RESTAURANT_BY_ID_QUERY,
+  INSERT_VENDOR_QUERY,
   SELECT_USER_BY_ID_QUERY,
 } from "../queries/user.query.js";
 
-export async function createUser({ name, email, password, role, restaurant_name, restaurant_id }) {
+export async function createUser({
+  name,
+  full_name,
+  email,
+  password,
+  role,
+  company_name,
+  gst_number,
+  contact_person,
+  phone,
+  address,
+}) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
-    const normalizedRole = role?.toLowerCase();
+
     const normalizedEmail = email.trim().toLowerCase();
-    let restaurantId;
+    const finalFullName = (full_name || name || "").trim();
+    const upperRole = (role || "VENDOR").toUpperCase();
 
-    if (normalizedRole === "owner") {
-      const restaurantResult = await client.query(INSERT_RESTAURANT_QUERY, [
-        restaurant_name,
-        normalizedEmail,
-      ]);
-      restaurantId = restaurantResult.rows[0].restaurant_id;
-    }
-
-    if (normalizedRole === "staff") {
-      const restaurantResult = await client.query(
-        SELECT_RESTAURANT_BY_ID_QUERY,
-        [restaurant_id],
-      );
-      if (!restaurantResult.rows[0]) {
-        const err = new Error(
-          "Restaurant not found for provided restaurant_id",
-        );
-        err.status = 404;
-        throw err;
-      }
-      restaurantId = restaurantResult.rows[0].id;
+    // Verify role is one of the valid enums
+    const validRoles = ["ADMIN", "PROCUREMENT_OFFICER", "MANAGER", "VENDOR"];
+    if (!validRoles.includes(upperRole)) {
+      const err = new Error(`Invalid role. Must be one of: ${validRoles.join(", ")}`);
+      err.status = 400;
+      throw err;
     }
 
     const passwordHash = await argon2.hash(password);
-    const userValues = [
-      restaurantId,
-      name,
+
+    // Insert user
+    const userResult = await client.query(INSERT_USER_QUERY, [
+      finalFullName,
       normalizedEmail,
       passwordHash,
-      normalizedRole,
-    ];
-    const userResult = await client.query(INSERT_USER_QUERY, userValues);
+      upperRole,
+    ]);
     const createdUser = userResult.rows[0];
 
+    let vendorDetails = null;
+
+    // If role is VENDOR, create the vendor record as well
+    if (upperRole === "VENDOR") {
+      const finalCompanyName = (company_name || `${finalFullName}'s Company`).trim();
+      const vendorResult = await client.query(INSERT_VENDOR_QUERY, [
+        createdUser.id,
+        finalCompanyName,
+        gst_number || null,
+        contact_person || finalFullName,
+        phone || null,
+        address || null,
+      ]);
+      vendorDetails = vendorResult.rows[0];
+    }
+
     await client.query("COMMIT");
+
     return {
-      ...createdUser, restaurantId, restaurant_name,
+      id: createdUser.id,
+      full_name: createdUser.full_name,
+      email: createdUser.email,
+      role: createdUser.role,
+      is_active: createdUser.is_active,
+      created_at: createdUser.created_at,
+      ...(vendorDetails
+        ? {
+            vendor_id: vendorDetails.id,
+            company_name: vendorDetails.company_name,
+            gst_number: vendorDetails.gst_number,
+            contact_person: vendorDetails.contact_person,
+            phone: vendorDetails.phone,
+            address: vendorDetails.address,
+            rating: vendorDetails.rating,
+            vendor_status: vendorDetails.status,
+          }
+        : {}),
     };
   } catch (error) {
     await client.query("ROLLBACK");

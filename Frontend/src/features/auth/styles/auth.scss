@@ -1,0 +1,570 @@
+@use 'sass:color';
+// ========================================================
+// NEUMORPHIC AUTH THEME
+// Soft UI / Neumorphism — Light white/grey palette
+// ========================================================
+
+// ── Variables ──────────────────────────────────────────
+$nm-bg:            #e8eaf0;
+$nm-bg-card:       #eef0f5;
+$nm-shadow-light:  #ffffff;
+$nm-shadow-dark:   #c8cad4;
+
+$nm-text-primary:  #3a3d52;
+$nm-text-secondary:#7a7f9a;
+$nm-text-muted:    #a8adc4;
+$nm-accent:        #5b6af0;
+$nm-accent-hover:  #4a58e0;
+
+$nm-radius-sm:     10px;
+$nm-radius-md:     16px;
+$nm-radius-lg:     24px;
+$nm-radius-xl:     32px;
+$nm-radius-pill:   999px;
+
+$nm-font:          'Inter', 'Segoe UI', system-ui, sans-serif;
+
+// ── Mixins ─────────────────────────────────────────────
+
+@mixin nm-raised($radius: $nm-radius-md) {
+  background: $nm-bg-card;
+  border-radius: $radius;
+  box-shadow:
+    8px  8px  18px $nm-shadow-dark,
+    -8px -8px 18px $nm-shadow-light;
+}
+
+@mixin nm-inset($radius: $nm-radius-md) {
+  background: $nm-bg;
+  border-radius: $radius;
+  box-shadow:
+    inset 5px  5px 12px $nm-shadow-dark,
+    inset -5px -5px 12px $nm-shadow-light;
+}
+
+@mixin nm-inset-light($radius: $nm-radius-md) {
+  background: $nm-bg-card;
+  border-radius: $radius;
+  box-shadow:
+    inset 3px  3px 8px rgba($nm-shadow-dark, 0.65),
+    inset -3px -3px 8px $nm-shadow-light;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Google Font Import ──────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// ── Reset / Base ─────────────────────────────────────────
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// ── Page Wrapper ───────────────────────────────────────
+.auth-page {
+  @include flex-center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: $nm-bg;
+  font-family: $nm-font;
+  position: relative;
+
+  // subtle decorative blobs
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.18;
+    filter: blur(60px);
+  }
+  &::before {
+    width: 520px;
+    height: 520px;
+    top: -120px;
+    left: -140px;
+    background: radial-gradient(circle, #b0b8ff 0%, transparent 70%);
+  }
+  &::after {
+    width: 400px;
+    height: 400px;
+    bottom: -80px;
+    right: -100px;
+    background: radial-gradient(circle, #c3c8ff 0%, transparent 70%);
+  }
+}
+
+// ── Auth Card ─────────────────────────────────────────
+.auth-card {
+  @include nm-raised($nm-radius-xl);
+  @include flex-col;
+  align-items: center;
+  width: 100%;
+  max-width: 420px;
+  max-height: 96vh;
+  overflow: hidden;
+  padding: 40px 36px 32px;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+
+  // ── Avatar ──
+  .auth-avatar {
+    @include nm-raised(50%);
+    @include flex-center;
+    width: 68px;
+    height: 68px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+
+    svg {
+      width: 30px;
+      height: 30px;
+      color: $nm-text-secondary;
+      stroke: $nm-text-secondary;
+    }
+  }
+
+  // ── Headings ──
+  .auth-heading {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: $nm-text-primary;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .auth-subheading {
+    font-size: 0.875rem;
+    color: $nm-text-muted;
+    text-align: center;
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  // ── Form ──
+  .auth-form {
+    @include flex-col;
+    width: 100%;
+    gap: 14px;
+  }
+
+  // ── Field Group ──
+  .auth-field {
+    @include flex-col;
+    gap: 5px;
+    width: 100%;
+
+    label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: $nm-text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding-left: 4px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      @include flex-center;
+
+      .input-icon {
+        position: absolute;
+        left: 14px;
+        width: 16px;
+        height: 16px;
+        color: $nm-text-muted;
+        pointer-events: none;
+        flex-shrink: 0;
+      }
+
+      input {
+        @include nm-inset($nm-radius-md);
+        width: 100%;
+        padding: 13px 14px 13px 40px;
+        font-family: $nm-font;
+        font-size: 0.9rem;
+        color: $nm-text-primary;
+        border: none;
+        outline: none;
+        transition: box-shadow 0.25s ease;
+
+        &::placeholder {
+          color: $nm-text-muted;
+          font-weight: 400;
+        }
+
+        &:focus {
+          box-shadow:
+            inset 5px  5px 12px rgba($nm-shadow-dark, 0.8),
+            inset -5px -5px 12px $nm-shadow-light,
+            0 0 0 2.5px rgba($nm-accent, 0.22);
+        }
+
+        // when used without icon
+        &.no-icon {
+          padding-left: 14px;
+        }
+      }
+
+      .eye-btn {
+        position: absolute;
+        right: 12px;
+        @include flex-center;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: $nm-text-muted;
+        padding: 4px;
+        border-radius: $nm-radius-sm;
+        transition: color 0.2s ease;
+
+        svg {
+          width: 17px;
+          height: 17px;
+        }
+
+        &:hover {
+          color: $nm-text-secondary;
+        }
+      }
+    }
+  }
+
+  // ── Row helpers ──
+  .auth-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: -2px;
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.83rem;
+      color: $nm-text-secondary;
+      user-select: none;
+
+      input[type="checkbox"] {
+        display: none;
+      }
+
+      .checkbox-box {
+        @include nm-inset($nm-radius-sm);
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        @include flex-center;
+        transition: all 0.2s ease;
+
+        &.checked {
+          background: $nm-accent;
+          box-shadow:
+            inset 2px 2px 6px rgba(color.adjust($nm-accent, $lightness: -20%), 0.5),
+            inset -2px -2px 6px rgba(color.adjust($nm-accent, $lightness: 30%), 0.3);
+
+          svg {
+            opacity: 1;
+          }
+        }
+
+        svg {
+          width: 10px;
+          height: 10px;
+          color: #fff;
+          opacity: 0;
+          transition: opacity 0.15s ease;
+        }
+      }
+    }
+
+    .forgot-link {
+      font-size: 0.83rem;
+      color: $nm-accent;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $nm-accent-hover;
+      }
+    }
+  }
+
+  // ── Submit Button ──
+  .auth-btn {
+    @include nm-raised($nm-radius-md);
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(145deg, color.adjust($nm-accent, $lightness: 5%), $nm-accent);
+    border: none;
+    border-radius: $nm-radius-md;
+    cursor: pointer;
+    font-family: $nm-font;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+    box-shadow:
+      5px 5px 14px rgba($nm-accent, 0.35),
+      -3px -3px 10px $nm-shadow-light;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+
+    &:hover {
+      filter: brightness(1.06);
+      box-shadow:
+        7px 7px 18px rgba($nm-accent, 0.45),
+        -3px -3px 12px $nm-shadow-light;
+    }
+
+    &:active {
+      transform: scale(0.985);
+    }
+  }
+
+  // ── Divider ──
+  .auth-divider {
+    @include flex-center;
+    gap: 12px;
+    width: 100%;
+    margin: 14px 0 10px;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba($nm-shadow-dark, 0.6);
+    }
+
+    span {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: $nm-text-muted;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+  }
+
+  // ── Redirect Footer ──
+  .auth-redirect {
+    margin-top: 16px;
+    font-size: 0.855rem;
+    color: $nm-text-secondary;
+    text-align: center;
+
+    a {
+      color: $nm-accent;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $nm-accent-hover;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ── Register Card — wide landscape layout ────────────────────────────────────
+.auth-card--register {
+  max-width: 760px;
+  width: 96vw;
+  padding: 36px 40px 30px;
+  flex-direction: row;
+  align-items: stretch;      // ← stretch so right column fills card height
+  gap: 36px;
+  height: 88vh;              // ← fixed height so flex children are bounded
+  max-height: 92vh;
+
+  // Left branding column
+  .register-left {
+    @include flex-col;
+    align-items: center;
+    justify-content: flex-start;   // top-aligned within stretched height
+    flex-shrink: 0;
+    width: 170px;
+    gap: 14px;
+    padding-top: 30px;
+
+    .auth-avatar {
+      margin-bottom: 0;
+    }
+
+    .auth-heading {
+      font-size: 1.35rem;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .auth-subheading {
+      font-size: 0.78rem;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .auth-redirect {
+      font-size: 0.78rem;
+      text-align: center;
+      margin-top: auto;
+      padding-top: 20px;
+    }
+  }
+
+  // Vertical divider
+  .register-divider {
+    width: 1px;
+    background: rgba($nm-shadow-dark, 0.55);
+    align-self: stretch;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+
+  // Right form column
+  .register-right {
+    @include flex-col;
+    flex: 1;
+    min-width: 0;
+    height: 100%;              // fill the full card height
+    overflow: hidden;
+
+    .auth-form {
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+      @include flex-col;
+      gap: 0;
+    }
+  }
+}
+
+// ── Role Selector — 3 columns ─────────────────────────────────────────────────
+.role-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+
+  .role-option {
+    position: relative;
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    label {
+      @include nm-raised($nm-radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 11px 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+
+      .role-icon {
+        font-size: 1.2rem;
+        line-height: 1;
+      }
+
+      .role-name {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: $nm-text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      &:hover {
+        box-shadow:
+          5px 5px 14px $nm-shadow-dark,
+          -5px -5px 14px $nm-shadow-light;
+      }
+    }
+
+    input[type="radio"]:checked + label {
+      @include nm-inset-light($nm-radius-md);
+      border-color: rgba($nm-accent, 0.5);
+
+      .role-name {
+        color: $nm-accent;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// ── Scroll override for register inner form ───────────────────────────────────
+.auth-form-scroll {
+  @include flex-col;
+  width: 100%;
+  gap: 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1 1 auto;
+  padding-right: 6px;
+
+  // Thin, styled scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: rgba($nm-shadow-dark, 0.7) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba($nm-shadow-dark, 0.6);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba($nm-accent, 0.35);
+    }
+  }
+}
+
+// ── Vendor Section ────────────────────────────────────────────────────────────
+.vendor-section {
+  @include nm-inset($nm-radius-md);
+  width: 100%;
+  padding: 14px 12px;
+  @include flex-col;
+  gap: 12px;
+
+  .vendor-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $nm-accent;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    border-bottom: 1px solid rgba($nm-accent, 0.15);
+    padding-bottom: 6px;
+    margin-bottom: 2px;
+  }
+}

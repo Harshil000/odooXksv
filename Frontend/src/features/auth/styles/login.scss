@@ -1,0 +1,210 @@
+:root {
+    --auth-bg: linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-primary) 100%);
+}
+
+@mixin button() {
+    padding: 0.85rem 1rem;
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &:hover {
+        background-color: var(--accent-hover);
+        box-shadow: 0 8px 18px rgba(139, 111, 78, 0.18);
+    }
+}
+
+@mixin flex-col-center(){
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-register-page {
+    display: flex;
+    @include flex-col-center();
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    gap: 0.9rem;
+    background: var(--auth-bg);
+
+    .containerCard {
+        @include flex-col-center();
+        gap: 1.75rem;
+        width: 100%;
+        max-width: 420px;
+        background-color: var(--bg-secondary);
+        padding: 48px 40px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-lg);
+
+        h1 {
+            font-family: 'Sabon', 'Georgia', serif;
+            font-size: clamp(2.1rem, 4vw, 2.5rem);
+            font-weight: 400;
+            color: var(--accent);
+            line-height: 1.1;
+        }
+
+        form {
+            @include flex-col-center();
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+
+            input,
+            select {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1px solid var(--border);
+                color: var(--text-primary);
+                border-radius: var(--radius);
+                background-color: var(--bg-primary);
+                font-family: 'Georgia', 'Times New Roman', serif;
+                font-size: 1rem;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+                &::placeholder {
+                    color: var(--text-muted);
+                }
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--accent);
+                    background-color: var(--bg-accent);
+                    box-shadow: 0 0 0 3px rgba(139, 111, 78, 0.1);
+                }
+            }
+
+            .password-field {
+                position: relative;
+                width: 100%;
+
+                input {
+                    padding-right: 88px;
+                }
+
+                button {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    right: 12px;
+                    padding: 0 0.35rem;
+                    background-color: transparent;
+                    border: none;
+                    cursor: pointer;
+                    color: var(--text-secondary);
+                    font-family: 'Georgia', serif;
+                    font-size: 0.95rem;
+                    transition: color 0.2s ease;
+
+                    &:hover {
+                        color: var(--accent);
+                    }
+                }
+            }
+
+            .profile_input_container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                .profile_picture_button {
+                    @include button();
+                    width: fit-content;
+                    font-size: 0.8rem;
+                }
+
+                input {
+                    display: none;
+                }
+            }
+
+            textarea{
+                width: 100%;
+                min-height: 110px;
+                padding: 12px 14px;
+                border: 1px solid var(--border);
+                color: var(--text-primary);
+                border-radius: var(--radius);
+                background-color: var(--bg-primary);
+                font-family: 'Georgia', 'Times New Roman', serif;
+                font-size: 1rem;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--accent);
+                    background-color: var(--bg-accent);
+                    box-shadow: 0 0 0 3px rgba(139, 111, 78, 0.1);
+                }
+            }
+
+            .submit-button {
+                width: 100%;
+                @include button();
+                font-family: 'Georgia', serif;
+                font-size: 1rem;
+                box-shadow: none;
+
+                &:hover {
+                    background-color: var(--accent-hover);
+                }
+            }
+
+            .forget_text {
+                color: var(--text-secondary);
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-family: 'Georgia', serif;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: var(--accent);
+                }
+            }
+        }
+    }
+
+    .RedirectCard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 420px;
+        min-height: 64px;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 16px 18px;
+
+        span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'Georgia', serif;
+
+            a {
+                color: var(--accent);
+                text-decoration: none;
+                transition: color 0.2s ease;
+                font-weight: 600;
+
+                &:hover {
+                    color: var(--accent-hover);
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

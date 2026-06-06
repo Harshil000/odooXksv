@@ -10,12 +10,22 @@ export async function authenticateUser(email, password) {
     throw err;
   }
 
-  let isPasswordValid =  user.password_hash == password
+  // Check if user is active
+  if (!user.is_active) {
+    const err = new Error("Your account has been deactivated");
+    err.status = 403;
+    throw err;
+  }
+
+  // Verify argon2 hash
+  const isPasswordValid = await argon2.verify(user.password_hash, password);
   if (!isPasswordValid) {
     const err = new Error("Invalid email or password");
     err.status = 401;
     throw err;
   }
 
-  return user;
+  // Remove password_hash before returning user object
+  const { password_hash, ...userWithoutPassword } = user;
+  return userWithoutPassword;
 }

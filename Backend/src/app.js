@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { handleError } from "./middleware/error.middleware.js";
+import authRoute from "./routes/auth.route.js";
+import morgan from "morgan";
 
 const app = express();
 
@@ -19,6 +22,7 @@ const isAllowedOrigin = (origin) => {
 };
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -28,11 +32,18 @@ app.use(
     credentials: true,
   }),
 );
+app.use(morgan("dev"))
+
+// =========================
+// ROUTES
+// =========================
+app.use("/api/auth", authRoute);
+
 // =========================
 // HEALTH CHECK
 // =========================
 app.get("/api/health", (req, res) => {
-  res.send("🚀 POS Backend Running");
+  res.send("🚀 KSV Backend Running");
 });
 
 // =========================
