@@ -1,7 +1,14 @@
 import jwt from "jsonwebtoken";
 
+/**
+ * Issues a signed JWT access token with all relevant user claims.
+ * @param {object} payload - { id, role, email, vendor_id, is_active }
+ * @returns {string} signed JWT
+ */
 export function issueAccessToken(payload) {
-  const secret = process.env.JWT_ACCESS_SECRET || "default_jwt_secret_key_12345";
+  const secret = process.env.JWT_ACCESS_SECRET;
+  if (!secret) throw new Error("JWT_ACCESS_SECRET is not set in environment");
+
   return jwt.sign(payload, secret, {
     expiresIn: "7d",
   });
