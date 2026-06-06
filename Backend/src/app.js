@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { handleError } from "./middleware/error.middleware.js";
 import authRoute from "./routes/auth.route.js";
+import categoryRoute from "./routes/category.route.js";
 import morgan from "morgan";
 
 const app = express();
@@ -17,7 +18,12 @@ const isAllowedOrigin = (origin) => {
   if (configuredOrigins.length === 0) return true;
   if (configuredOrigins.includes(origin)) return true;
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) return true;
-  if (/^https?:\/\/(192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$/i.test(origin)) return true;
+  if (
+    /^https?:\/\/(192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$/i.test(
+      origin,
+    )
+  )
+    return true;
   return false;
 };
 
@@ -32,12 +38,13 @@ app.use(
     credentials: true,
   }),
 );
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 
 // =========================
 // ROUTES
 // =========================
 app.use("/api/auth", authRoute);
+app.use("/api/categories", categoryRoute);
 
 // =========================
 // HEALTH CHECK
