@@ -92,7 +92,12 @@ const CreateRfq = () => {
         {/* Dynamic Items List Section */}
         <div className="form-section-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span>Required Product Items</span>
-          <button type="button" className="action-btn" onClick={addItem} style={{ padding: "8px 16px", fontSize: "0.8rem" }}>
+          <button 
+            type="button" 
+            className="action-btn" 
+            onClick={addItem} 
+            style={{ minWidth: "120px", minHeight: "38px", display: "inline-flex", alignItems: "center", justifyContent: "center", whiteSpace: "nowrap" }}
+          >
             + Add Item
           </button>
         </div>
@@ -125,6 +130,7 @@ const CreateRfq = () => {
             className="action-btn secondary"
             onClick={() => navigate("/rfqs")}
             disabled={submitting}
+            style={{ minWidth: "140px", minHeight: "42px", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
           >
             Cancel
           </button>
@@ -132,6 +138,7 @@ const CreateRfq = () => {
             type="submit"
             className="action-btn"
             disabled={submitting}
+            style={{ minWidth: "140px", minHeight: "42px", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
           >
             {submitting ? "Publishing..." : "Publish RFQ"}
           </button>

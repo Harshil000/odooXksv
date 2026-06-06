@@ -5,6 +5,9 @@ import {
   INSERT_USER_QUERY,
   INSERT_VENDOR_QUERY,
   SELECT_USER_BY_ID_QUERY,
+  SELECT_ALL_USERS_QUERY,
+  UPDATE_USER_STATUS_QUERY,
+  UPDATE_VENDOR_STATUS_QUERY,
 } from "../queries/user.query.js";
 
 export async function createUser({
@@ -37,12 +40,15 @@ export async function createUser({
 
     const passwordHash = await argon2.hash(password);
 
+    const userIsActive = upperRole === "ADMIN";
+
     // Insert user
     const userResult = await client.query(INSERT_USER_QUERY, [
       finalFullName,
       normalizedEmail,
       passwordHash,
       upperRole,
+      userIsActive,
     ]);
     const createdUser = userResult.rows[0];
 
@@ -51,6 +57,7 @@ export async function createUser({
     // If role is VENDOR, create the vendor record as well
     if (upperRole === "VENDOR") {
       const finalCompanyName = (company_name || `${finalFullName}'s Company`).trim();
+      const vendorStatus = userIsActive ? "ACTIVE" : "INACTIVE";
       const vendorResult = await client.query(INSERT_VENDOR_QUERY, [
         createdUser.id,
         finalCompanyName,
@@ -58,6 +65,7 @@ export async function createUser({
         contact_person || finalFullName,
         phone || null,
         address || null,
+        vendorStatus,
       ]);
       vendorDetails = vendorResult.rows[0];
     }
@@ -100,4 +108,42 @@ export async function findUserByEmail(email) {
 export async function findUserById(id) {
   const result = await pool.query(SELECT_USER_BY_ID_QUERY, [id]);
   return result.rows[0] || null;
+}
+
+export async function findAllUsers() {
+  const result = await pool.query(SELECT_ALL_USERS_QUERY);
+  return result.rows;
+}
+
+export async function updateUserStatusTx(userId, isActive) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    // Update user is_active
+    const userRes = await client.query(UPDATE_USER_STATUS_QUERY, [userId, isActive]);
+    if (userRes.rowCount === 0) {
+      const err = new Error(`User with ID ${userId} not found`);
+      err.status = 404;
+      throw err;
+    }
+    const updatedUser = userRes.rows[0];
+
+    // If role is VENDOR, sync its vendor status
+    if (updatedUser.role === "VENDOR") {
+      const vendorStatus = isActive ? "ACTIVE" : "INACTIVE";
+      await client.query(UPDATE_VENDOR_STATUS_QUERY, [userId, vendorStatus]);
+    }
+
+    await client.query("COMMIT");
+
+    // Return the full updated user profile
+    const fullUserRes = await client.query(SELECT_USER_BY_ID_QUERY, [userId]);
+    return fullUserRes.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }

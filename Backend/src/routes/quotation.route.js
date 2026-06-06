@@ -6,6 +6,7 @@ import {
   getQuotationDetails,
   getQuotations,
   getMyQuotationForRfq,
+  deleteQuotation,
 } from "../controller/quotation.controller.js";
 
 const quotationRouter = Router();
@@ -17,6 +18,7 @@ quotationRouter.get("/", getQuotations);
 quotationRouter.post("/", submitQuotation);
 quotationRouter.get("/:id", getQuotationDetails);
 quotationRouter.put("/:id", updateQuotation);
+quotationRouter.delete("/:id", deleteQuotation);
 quotationRouter.get("/rfq/:rfqId/my", getMyQuotationForRfq);
 
 export default quotationRouter;

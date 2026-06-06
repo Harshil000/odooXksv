@@ -12,7 +12,7 @@ export async function authenticateUser(email, password) {
 
   // Check if user is active
   if (!user.is_active) {
-    const err = new Error("Your account has been deactivated");
+    const err = new Error("Your account is pending admin approval or has been deactivated.");
     err.status = 403;
     throw err;
   }

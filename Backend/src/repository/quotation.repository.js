@@ -14,6 +14,7 @@ import {
   UPDATE_QUOTATION_QUERY,
   DELETE_QUOTATION_ITEMS_QUERY,
   SELECT_RFQ_ITEM_QUANTITY_QUERY,
+  DELETE_QUOTATION_QUERY,
 } from "../queries/quotation.query.js";
 
 // Helper: Fetches a quotation and its line items
@@ -283,4 +284,49 @@ export async function findQuotations({ vendor_id, rfq_id } = {}) {
   }
   const result = await pool.query(SELECT_QUOTATIONS_QUERY);
   return result.rows;
+}
+
+export async function deleteQuotationTx(id, vendorId) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    // Fetch quotation to verify ownership and RFQ open status
+    const qCheckResult = await client.query("SELECT rfq_id, vendor_id FROM quotations WHERE id = $1", [id]);
+    const currentQ = qCheckResult.rows[0];
+    if (!currentQ) {
+      const err = new Error("Quotation not found");
+      err.status = 404;
+      throw err;
+    }
+
+    if (Number(currentQ.vendor_id) !== Number(vendorId)) {
+      const err = new Error("Unauthorized: You do not own this quotation");
+      err.status = 403;
+      throw err;
+    }
+
+    // Verify RFQ is open
+    const rfqCheck = await client.query(SELECT_RFQ_STATUS_CHECK_QUERY, [currentQ.rfq_id]);
+    const rfq = rfqCheck.rows[0];
+    if (!rfq || rfq.evaluated_status !== "OPEN") {
+      const err = new Error("Quotations can only be deleted while the RFQ is OPEN");
+      err.status = 400;
+      throw err;
+    }
+
+    // Delete items, negotiations, approvals, then the quotation itself
+    await client.query("DELETE FROM quotation_items WHERE quotation_id = $1", [id]);
+    await client.query("DELETE FROM negotiations WHERE quotation_id = $1", [id]);
+    await client.query("DELETE FROM approvals WHERE quotation_id = $1", [id]);
+    const res = await client.query(DELETE_QUOTATION_QUERY, [id]);
+
+    await client.query("COMMIT");
+    return res.rowCount > 0;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }

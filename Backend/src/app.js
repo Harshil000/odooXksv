@@ -9,7 +9,14 @@ import categoryRoute from "./routes/category.route.js";
 import quotationRoute from "./routes/quotation.route.js";
 import approvalRoute from "./routes/approval.route.js";
 import negotiationRoute from "./routes/negotiation.route.js";
+import poRoute from "./routes/po.route.js";
+import invoiceRoute from "./routes/invoice.route.js";
+import adminRoute from "./routes/admin.route.js";
+import dashboardRoute from "./routes/dashboard.route.js";
+import reportsRoute from "./routes/reports.route.js";
+import activitiesRoute from "./routes/activities.route.js";
 import morgan from "morgan";
+
 
 
 
@@ -57,6 +64,12 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/quotations", quotationRoute);
 app.use("/api/approvals", approvalRoute);
 app.use("/api/negotiations", negotiationRoute);
+app.use("/api/purchase-orders", poRoute);
+app.use("/api/invoices", invoiceRoute);
+app.use("/api/admin", adminRoute);
+app.use("/api/dashboard", dashboardRoute);
+app.use("/api/reports", reportsRoute);
+app.use("/api/activities", activitiesRoute);
 
 // =========================
 // HEALTH CHECK

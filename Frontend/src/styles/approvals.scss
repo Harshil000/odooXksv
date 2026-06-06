@@ -114,11 +114,9 @@
   }
 
   &.active {
-    background: linear-gradient(
-      135deg,
-      $nm-bg-card 0%,
-      lighten($nm-bg-card, 3%) 100%
-    );
+    background: linear-gradient(135deg,
+        $nm-bg-card 0%,
+        lighten($nm-bg-card, 3%) 100%);
     border-left: 4px solid $nm-accent;
     padding-left: 12px;
   }
@@ -270,11 +268,9 @@
         transition: all 0.3s ease;
 
         &.completed {
-          background: linear-gradient(
-            135deg,
-            $nm-accent 0%,
-            lighten($nm-accent, 10%) 100%
-          );
+          background: linear-gradient(135deg,
+              $nm-accent 0%,
+              lighten($nm-accent, 10%) 100%);
           color: white;
           box-shadow: 0 4px 12px rgba(91, 106, 240, 0.3);
         }
@@ -348,11 +344,9 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: linear-gradient(
-        135deg,
-        $nm-accent 0%,
-        lighten($nm-accent, 10%) 100%
-      );
+      background: linear-gradient(135deg,
+          $nm-accent 0%,
+          lighten($nm-accent, 10%) 100%);
       color: white;
       display: flex;
       align-items: center;
@@ -444,11 +438,9 @@
       font-weight: 600;
       font-size: 14px;
       color: white;
-      background: linear-gradient(
-        135deg,
-        $nm-accent 0%,
-        lighten($nm-accent, 5%) 100%
-      );
+      background: linear-gradient(135deg,
+          $nm-accent 0%,
+          lighten($nm-accent, 5%) 100%);
       cursor: pointer;
       transition: all 0.3s ease;
 
@@ -511,11 +503,9 @@
     flex-direction: column;
     gap: 16px;
     padding: 16px;
-    background: linear-gradient(
-      135deg,
-      $nm-bg-card 0%,
-      lighten($nm-bg-card, 2%) 100%
-    );
+    background: linear-gradient(135deg,
+        $nm-bg-card 0%,
+        lighten($nm-bg-card, 2%) 100%);
     border-radius: 12px;
 
     .quotation-row {

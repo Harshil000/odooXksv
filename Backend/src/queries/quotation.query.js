@@ -100,3 +100,8 @@ export const SELECT_RFQ_ITEM_QUANTITY_QUERY = `
 SELECT ri.id, ri.quantity FROM rfq_items ri
 WHERE ri.id = $1 AND ri.rfq_id = $2;
 `;
+
+export const DELETE_QUOTATION_QUERY = `
+DELETE FROM quotations
+WHERE id = $1;
+`;

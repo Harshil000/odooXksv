@@ -42,11 +42,12 @@ $nm-radius-sm: 10px;
   position: relative;
   margin-top: 70px;
   margin-left: 240px;
-  min-height: calc(100vh - 70px);
+  height: calc(100vh - 70px);
   background: $nm-bg;
   padding: 30px;
   transition: margin-left 0.3s ease;
   font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  overflow-y: auto;
 
   &.sidebar-collapsed {
     margin-left: 80px;

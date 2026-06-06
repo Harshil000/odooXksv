@@ -4,6 +4,7 @@ import {
   findQuotationById,
   findQuotationByRfqAndVendor,
   findQuotations,
+  deleteQuotationTx,
 } from "../repository/quotation.repository.js";
 
 /**
@@ -147,6 +148,24 @@ export async function getMyQuotationForRfq(req, res, next) {
     }
 
     return res.status(200).json(quotation);
+  } catch (error) {
+    next(error);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DELETE /api/quotations/:id
+// ─────────────────────────────────────────────────────────────────────────────
+export async function deleteQuotation(req, res, next) {
+  try {
+    const vendorId = enforceVendorRole(req);
+    const { id } = req.params;
+
+    await deleteQuotationTx(Number(id), vendorId);
+
+    return res.status(200).json({
+      message: "Quotation cancelled successfully",
+    });
   } catch (error) {
     next(error);
   }

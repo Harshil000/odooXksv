@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useLocation, Link } from "react-router";
+import useAuth from "../features/auth/hook/useAuth";
 import "../styles/sidebar.scss";
 
 const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const { user } = useAuth();
 
   const menuItems = [
     { label: "Dashboard", path: "/", icon: "📊" },
+    ...(user?.role === "ADMIN" ? [{ label: "User Approvals", path: "/admin/approvals", icon: "👥" }] : []),
     { label: "Vendors", path: "/vendors", icon: "🏢" },
     { label: "RFQ's", path: "/rfqs", icon: "📋" },
     { label: "Quotations", path: "/quotations", icon: "💬" },

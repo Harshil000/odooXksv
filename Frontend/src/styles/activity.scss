@@ -92,6 +92,24 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
+  padding-right: 12px;
+  padding-bottom: 24px;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(#c8cad4, 0.6) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(#c8cad4, 0.7);
+    border-radius: 4px;
+  }
 }
 
 .activity-item {

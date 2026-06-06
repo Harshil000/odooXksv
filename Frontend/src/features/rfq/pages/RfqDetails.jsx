@@ -58,10 +58,11 @@ const RfqDetails = () => {
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "12px" }}>
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
           <button
             className="action-btn secondary"
             onClick={() => navigate("/rfqs")}
+            style={{ minWidth: "140px", minHeight: "42px", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
           >
             Back to List
           </button>
@@ -71,6 +72,7 @@ const RfqDetails = () => {
             <button
               className="action-btn"
               onClick={() => navigate(`/rfq/${id}/edit`)}
+              style={{ minWidth: "140px", minHeight: "42px", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
             >
               Edit RFQ
             </button>

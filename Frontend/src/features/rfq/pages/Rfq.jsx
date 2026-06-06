@@ -41,6 +41,7 @@ const Rfq = () => {
           <button
             className="action-btn"
             onClick={() => navigate("/rfq/create")}
+            style={{ minWidth: "150px", minHeight: "44px", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
           >
             + Create RFQ
           </button>

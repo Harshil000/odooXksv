@@ -46,6 +46,13 @@ export async function registerController(req, res, next) {
   try {
     const user = await createUser(req.body);
 
+    if (!user.is_active) {
+      return res.status(201).json({
+        msg: "Registration successful. Your account is pending admin approval.",
+        user: formatUser(user),
+      });
+    }
+
     const accessToken = issueAccessToken(buildTokenPayload(user));
     res.cookie("accessToken", accessToken, getAccessCookieOptions());
 

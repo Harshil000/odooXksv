@@ -11,8 +11,13 @@ import CreateRfq from "../features/rfq/pages/CreateRfq";
 import RfqDetails from "../features/rfq/pages/RfqDetails";
 import EditRfq from "../features/rfq/pages/EditRfq";
 import Vendors from "./Vendors";
-import Approvals from "./Approvals";
-import Activity from "./Activity";
+import Approvals from "../features/approval/pages/Approvals";
+import Activity from "../features/activity/pages/Activity";
+import UserApprovals from "../features/user-approval/pages/UserApprovals";
+import Quotations from "../features/quotation/pages/Quotations";
+import PurchaseOrders from "../features/purchase-order/pages/PurchaseOrders";
+import Invoices from "../features/invoice/pages/Invoices";
+import Reports from "../features/reports/pages/Reports";
 
 export const router = createBrowserRouter([
   {
@@ -43,12 +48,32 @@ export const router = createBrowserRouter([
         element: <Vendors />,
       },
       {
+        path: "/quotations",
+        element: <Quotations />,
+      },
+      {
         path: "/activity",
         element: <Activity />,
       },
       {
         path: "/approvals",
         element: <Approvals />,
+      },
+      {
+        path: "/admin/approvals",
+        element: <UserApprovals />,
+      },
+      {
+        path: "/purchase-orders",
+        element: <PurchaseOrders />,
+      },
+      {
+        path: "/invoices",
+        element: <Invoices />,
+      },
+      {
+        path: "/reports",
+        element: <Reports />,
       },
     ],
   },
